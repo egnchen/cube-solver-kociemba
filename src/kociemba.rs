@@ -137,15 +137,18 @@ impl KociembaSolver {
     }
 
     fn solve_phase2(&mut self) {
-        let mut repr = Phase2Repr {
-            ep: self.initial.ep,
-            cp: self.initial.cp,
+        let repr = {
+            let mut repr = Phase2Repr {
+                ep: self.initial.ep,
+                cp: self.initial.cp,
+            };
+            for r in &self.phase1_moves {
+                repr.rotate(*r);
+            }
+            repr
         };
-        for r in &self.phase1_moves {
-            repr.rotate(*r);
-        }
         let start_depth = KociembaSolver::h2(&repr);
-        let mut max_depth = if self.current_solve.is_empty() {
+        let max_depth = if self.current_solve.is_empty() {
             18
         } else {
             self.current_solve.len() - self.phase1_moves.len() - 2

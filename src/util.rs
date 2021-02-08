@@ -47,28 +47,11 @@ pub fn encode_comb<T: Copy + ToPrimitive>(arr: &[T], n: usize) -> usize {
     res
 }
 
-#[inline(always)]
-pub fn encode_comb_opt(arr: &[bool], k: usize) -> usize {
-    let mut k = k;
-    let mut res = 0;
-    for i in (0..arr.len()).rev() {
-        if arr[i] {
-            k -= 1;
-        } else {
-            res += comb(i, k - 1);
-        }
-        if k == 0 {
-            break
-        }
-    }
-    res
-}
-
 const COMB: [[usize; 4]; 13] =
     [[1, 0, 0, 0], [1, 1, 0, 0], [1, 2, 1, 0], [1, 3, 3, 1], [1, 4, 6, 4], [1, 5, 10, 10], [1, 6, 15, 20], [1, 7, 21, 35], [1, 8, 28, 56], [1, 9, 36, 84], [1, 10, 45, 120], [1, 11, 55, 165], [1, 12, 66, 220]];
 
 #[inline(always)]
-fn comb(n: usize, k: usize) -> usize {
+pub fn comb(n: usize, k: usize) -> usize {
     COMB[n][k]
 }
 
@@ -83,22 +66,6 @@ mod test {
         assert_eq!(encode_comb(&[3, 6, 9, 11], 12), 62);
         assert_eq!(encode_comb(&[1, 4, 8, 9], 12), 305);
         assert_eq!(encode_comb(&[0, 1, 2, 3], 12), 494);
-    }
-
-    fn get_opt_repr(repr: &[usize]) -> [bool; 12] {
-        let mut buf = [false; 12];
-        for i in repr {
-            buf[*i] = true
-        }
-        buf
-    }
-
-    #[test]
-    fn test_encode_comb_opt() {
-        assert_eq!(encode_comb_opt(&get_opt_repr(&[8, 9, 10, 11]), 4), 0);
-        assert_eq!(encode_comb_opt(&get_opt_repr(&[3, 6, 9, 11]), 4), 62);
-        assert_eq!(encode_comb_opt(&get_opt_repr(&[1, 4, 8, 9]), 4), 305);
-        assert_eq!(encode_comb_opt(&get_opt_repr(&[0, 1, 2, 3]), 4), 494);
     }
 
 }

@@ -2,7 +2,7 @@ use crate::rubiks_cube::*;
 use crate::num_traits::ToPrimitive;
 use std::collections::VecDeque;
 use std::marker::PhantomData;
-use crate::util::{encode_comb, encode_perm, encode_comb_opt};
+use crate::util::{encode_comb, encode_perm, comb};
 use std::ops::Index;
 
 /// Building heuristic tables
@@ -111,11 +111,19 @@ pub fn phase1_medge_encode(repr: &EdgePerm) -> usize {
 }
 
 pub fn phase1_medge_encode_opt(repr: &EdgePerm) -> usize {
-    let mut buf = [false; 12];
-    for i in 0..12 {
-        buf[i] = repr.0[i] >= 4 && repr.0[i] < 8;
+    let mut k = 4;
+    let mut res = 0;
+    for i in (0..12).rev() {
+        if repr.0[i] >= 4 && repr.0[i] < 8 {
+            k -= 1;
+            if k == 0 {
+                break
+            }
+        } else {
+            res += comb(i, k - 1);
+        }
     }
-    encode_comb_opt(&buf, 4)
+    res
 }
 
 pub fn phase2_medge_encode(repr: &EdgePerm) -> usize {

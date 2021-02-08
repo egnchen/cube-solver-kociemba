@@ -1,7 +1,7 @@
 use std::fmt::{Display, Formatter, Result};
 use std::ops::{Index, IndexMut};
 
-use crate::num_traits::{FromPrimitive, ToPrimitive};
+use crate::num_traits::ToPrimitive;
 use crate::util::encode_perm;
 
 #[derive(FromPrimitive, ToPrimitive)]
